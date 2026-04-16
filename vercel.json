@@ -1,27 +1,13 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/app.py",
-      "use": "@vercel/python"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "Frontend/AgroBase_FullWidth_CommandCenter.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "backend/app.py"
-    },
-    {
-      "src": "/",
-      "dest": "/Frontend/AgroBase_FullWidth_CommandCenter.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/Frontend/$1"
+      "source": "/",
+      "destination": "/Frontend/AgroBase_FullWidth_CommandCenter.html"
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "Frontend/AgroBase_FullWidth_CommandCenter.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/",
+      "dest": "/Frontend/AgroBase_FullWidth_CommandCenter.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Frontend/$1"
+    }
+  ]
+}

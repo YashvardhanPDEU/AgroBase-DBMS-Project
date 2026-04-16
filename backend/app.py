@@ -6,6 +6,11 @@ Start server:  python app.py
 API base URL:  http://localhost:5000
 """
 
+import sys
+import os
+# Ensure Vercel can resolve local imports from the backend directory
+sys.path.insert(0, os.path.dirname(__file__))
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 

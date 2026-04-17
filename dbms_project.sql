@@ -186,6 +186,11 @@ INSERT INTO Farms (farm_id, farm_name, location, owner, size_acres, carbon_footp
 	(34, 'Parks, Russo and Maldonado Farm', 'Connecticut', 'Peggy House', 463, 2.89),
 	(35, 'Johnson-Sandoval Farm', 'Ohio', 'Brenda Martinez', 373, 7.32),
 	(36, 'Navarro, Davis and Mckinney Farm', 'Nevada', 'Danielle Barron', 799, 6.83);
+  INSERT INTO Farms (farm_id, farm_name, location, owner, size_acres, carbon_footprint_tons) VALUES
+    (37, 'Blue Ridge Harvests', 'North Carolina', 'Sarah Jenkins', 1200, 6.25),
+    (38, 'Golden Wheat Fields', 'Kansas', 'Robert Miller', 3500, 7.10),
+    (39, 'Pine Creek Dairy & Crop', 'Wisconsin', 'Emily Larson', 820, 6.95),
+    (40, 'Lone Star AgriCorp', 'Texas', 'David Vasquez', 4100, 7.30);
 
 select farm_id, farm_name, location from Farms where size_acres > 500;
 

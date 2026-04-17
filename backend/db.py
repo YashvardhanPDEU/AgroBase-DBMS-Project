@@ -28,3 +28,19 @@ def query_one(sql, params=None):
     """
     rows = query(sql, params)
     return rows[0] if rows else None
+
+
+def execute(sql, params=None):
+    """
+    Execute an INSERT / UPDATE / DELETE query.
+    Commits the transaction and returns the lastrowid.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(sql, params or ())
+        conn.commit()
+        return cursor.lastrowid
+    finally:
+        cursor.close()
+        conn.close()

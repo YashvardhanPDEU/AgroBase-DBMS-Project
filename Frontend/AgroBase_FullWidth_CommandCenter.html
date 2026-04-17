@@ -15,6 +15,7 @@
             --bg-canvas: #f1f5f9;
             --border: #e2e8f0;
             --text-main: #1e293b;
+            --danger: #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -68,9 +69,41 @@
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
 
-        header { margin-bottom: 24px; }
+        header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; }
         header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
         header p { color: #64748b; font-size: 14px; }
+
+        /* ── Action Buttons ── */
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        .header-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
 
         /* ── Metric cards ── */
         .metrics-row {
@@ -93,7 +126,7 @@
         .m-val.loading { color: #cbd5e1; }
 
         /* ── Charts ── */
-        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         .card {
             background: white;
             padding: 24px;
@@ -104,8 +137,56 @@
             display: flex;
             flex-direction: column;
         }
-        .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #475569; }
+        .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #475569; display: flex; align-items: center; justify-content: space-between; }
         .chart-wrap { flex: 1; position: relative; }
+
+        /* ── Farms Table ── */
+        .farms-table-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+        .farms-table-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+        .farms-table-header h3 { font-size: 16px; font-weight: 700; color: #475569; }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .data-table th {
+            background: #f8fafc;
+            padding: 11px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #374151;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: #f8fafc; }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #dcfce7;
+            color: #16a34a;
+        }
 
         /* ── Right panel ── */
         .right-panel {
@@ -142,11 +223,11 @@
             margin-top: auto;
             padding: 10px 14px;
             border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            text-align: center;
-            background: rgba(255,255,255,0.07);
+            font-size: 12px;
+            font-weight: 600;
             color: #64748b;
+            background: rgba(255,255,255,0.05);
+            text-align: center;
         }
         #api-status.connected { color: var(--primary); background: rgba(16,185,129,0.12); }
         #api-status.error { color: #f87171; background: rgba(248,113,113,0.12); }
@@ -171,6 +252,98 @@
             color: #16a34a;
             margin-bottom: 6px;
         }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+        .modal {
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            width: 480px;
+            max-width: 95vw;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+        .modal-subtitle { font-size: 13px; color: #64748b; margin-bottom: 28px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group label { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .form-group input, .form-group select {
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 28px; }
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-cancel:hover { background: #e2e8f0; }
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+        .btn-submit:hover { background: var(--primary-dark); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Toast Notification ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: #10b981; color: white; }
+        .toast.error { background: #ef4444; color: white; }
+
+        /* ── Loading spinner in table ── */
+        .table-loading { text-align: center; padding: 32px; color: #94a3b8; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -181,13 +354,17 @@
     <button id="btn-crops"    class="nav-link" onclick="tab('crops', this)">Crops &amp; Yield</button>
     <button id="btn-soil"     class="nav-link" onclick="tab('soil', this)">Soil &amp; Water</button>
     <button id="btn-supply"   class="nav-link" onclick="tab('supply', this)">Supply Chain</button>
+    <button id="btn-manage"   class="nav-link" onclick="tab('manage', this)">🏚 Manage Farms</button>
     <div id="api-status">⏳ Connecting…</div>
 </aside>
 
 <main>
     <header>
-        <h1 id="view-title">Command Center Overview</h1>
-        <p id="view-subtitle">Aggregated live data from your MySQL database.</p>
+        <div>
+            <h1 id="view-title">Command Center Overview</h1>
+            <p id="view-subtitle">Aggregated live data from your MySQL database.</p>
+        </div>
+        <div class="header-actions" id="header-actions"></div>
     </header>
 
     <!-- ── OVERVIEW TAB ── -->
@@ -257,6 +434,20 @@
             <div class="chart-wrap"><canvas id="c5"></canvas></div>
         </div>
     </div>
+
+    <!-- ── MANAGE FARMS TAB ── -->
+    <div id="manage" class="section">
+        <div class="farms-table-card">
+            <div class="farms-table-header">
+                <h3>All Farms</h3>
+                <button class="btn-primary" onclick="openAddFarmModal()">+ Add New Farm</button>
+            </div>
+            <div id="farms-table-body">
+                <div class="table-loading">Loading farms…</div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <!-- ── RIGHT PANEL ── -->
@@ -283,6 +474,43 @@
     </div>
 </div>
 
+<!-- ── ADD FARM MODAL ── -->
+<div class="modal-overlay" id="add-farm-modal">
+    <div class="modal">
+        <div class="modal-title">🌿 Add New Farm</div>
+        <div class="modal-subtitle">This will instantly save to your live database.</div>
+        <div class="form-grid">
+            <div class="form-group full">
+                <label>Farm Name *</label>
+                <input type="text" id="f-name" placeholder="e.g. Sunrise Valley Organics">
+            </div>
+            <div class="form-group">
+                <label>State / Location *</label>
+                <input type="text" id="f-location" placeholder="e.g. California">
+            </div>
+            <div class="form-group">
+                <label>Owner / Manager *</label>
+                <input type="text" id="f-owner" placeholder="e.g. John Smith">
+            </div>
+            <div class="form-group">
+                <label>Size (Acres) *</label>
+                <input type="number" id="f-acres" placeholder="e.g. 450" min="1">
+            </div>
+            <div class="form-group">
+                <label>Carbon Footprint (tons)</label>
+                <input type="number" id="f-carbon" placeholder="e.g. 6.50" step="0.01" min="0">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal('add-farm-modal')">Cancel</button>
+            <button class="btn-submit" id="farm-submit-btn" onclick="submitFarm()">Save Farm</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
 <script>
     const API = "/api";
 
@@ -298,7 +526,6 @@
         }
     };
 
-    // Chart instances so we can destroy+recreate on data load
     const charts = {};
 
     function makeChart(id, type, labels, data, opts = {}) {
@@ -327,8 +554,12 @@
         document.getElementById(id).classList.add('active');
         el.classList.add('active');
         const names = { overview:'Command Center Overview', crops:'Crops & Yield Dashboard',
-                        soil:'Soil & Water Dashboard', supply:'Supply Chain Dashboard' };
+                        soil:'Soil & Water Dashboard', supply:'Supply Chain Dashboard',
+                        manage:'Manage Farms' };
         document.getElementById('view-title').innerText = names[id] || id;
+
+        // Load manage tab data when clicked
+        if (id === 'manage') loadFarmsTable();
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -343,35 +574,172 @@
         if (el) { el.textContent = val; el.classList.remove('loading'); }
     }
 
-    // ── API fetch wrapper ─────────────────────────────────────────────────────
     async function get(path) {
         const res = await fetch(API + path);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
     }
 
+    async function post(path, body) {
+        const res = await fetch(API + path, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return { ok: res.ok, status: res.status, data: await res.json() };
+    }
+
+    async function del(path) {
+        const res = await fetch(API + path, { method: 'DELETE' });
+        return { ok: res.ok, data: await res.json() };
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `toast ${type} show`;
+        setTimeout(() => { t.classList.remove('show'); }, 3500);
+    }
+
+    // ── Modal helpers ─────────────────────────────────────────────────────────
+    function openAddFarmModal() {
+        document.getElementById('f-name').value = '';
+        document.getElementById('f-location').value = '';
+        document.getElementById('f-owner').value = '';
+        document.getElementById('f-acres').value = '';
+        document.getElementById('f-carbon').value = '';
+        document.getElementById('add-farm-modal').classList.add('open');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    // Close modal when clicking overlay
+    document.getElementById('add-farm-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal('add-farm-modal');
+    });
+
+    // ── SUBMIT FARM FORM ──────────────────────────────────────────────────────
+    async function submitFarm() {
+        const name    = document.getElementById('f-name').value.trim();
+        const location= document.getElementById('f-location').value.trim();
+        const owner   = document.getElementById('f-owner').value.trim();
+        const acres   = document.getElementById('f-acres').value;
+        const carbon  = document.getElementById('f-carbon').value || 0;
+
+        if (!name || !location || !owner || !acres) {
+            showToast('Please fill in all required fields.', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('farm-submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+
+        try {
+            const result = await post('/overview/farms', {
+                farm_name: name,
+                location,
+                owner,
+                size_acres: parseInt(acres),
+                carbon_footprint_tons: parseFloat(carbon)
+            });
+
+            if (result.ok) {
+                closeModal('add-farm-modal');
+                showToast(`✅ ${result.data.message}`, 'success');
+                // Refresh data
+                await loadOverview();
+                await loadFarmsTable();
+            } else {
+                showToast(`❌ Error: ${result.data.error}`, 'error');
+            }
+        } catch (err) {
+            showToast('❌ Network error. Please try again.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Farm';
+        }
+    }
+
+    // ── FARMS TABLE ───────────────────────────────────────────────────────────
+    async function loadFarmsTable() {
+        const container = document.getElementById('farms-table-body');
+        container.innerHTML = '<div class="table-loading">Loading farms…</div>';
+        try {
+            const farms = await get('/overview/farms/list');
+            if (!farms.length) {
+                container.innerHTML = '<div class="table-loading">No farms found.</div>';
+                return;
+            }
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Farm Name</th>
+                            <th>State</th>
+                            <th>Owner</th>
+                            <th>Acres</th>
+                            <th>Carbon (tons)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${farms.map(f => `
+                            <tr>
+                                <td><span class="badge">#${f.farm_id}</span></td>
+                                <td><b>${f.farm_name}</b></td>
+                                <td>${f.location}</td>
+                                <td>${f.owner}</td>
+                                <td>${f.size_acres.toLocaleString()}</td>
+                                <td>${parseFloat(f.carbon_footprint_tons).toFixed(2)}</td>
+                                <td><button class="btn-danger" onclick="deleteFarm(${f.farm_id}, '${f.farm_name.replace(/'/g, "\\'")}')">Delete</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+        } catch (err) {
+            container.innerHTML = '<div class="table-loading" style="color:#ef4444;">Failed to load farms.</div>';
+        }
+    }
+
+    async function deleteFarm(id, name) {
+        if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) return;
+        try {
+            const result = await del(`/overview/farms/${id}`);
+            if (result.ok) {
+                showToast(`🗑️ ${result.data.message}`, 'success');
+                await loadOverview();
+                await loadFarmsTable();
+            } else {
+                showToast(`❌ ${result.data.error}`, 'error');
+            }
+        } catch(err) {
+            showToast('❌ Network error.', 'error');
+        }
+    }
+
     // ── OVERVIEW ──────────────────────────────────────────────────────────────
     async function loadOverview() {
-        // Metrics
         const m = await get('/overview/metrics');
         setText('ov-farms',    m.total_farms);
         setText('ov-fields',   m.total_fields);
         setText('ov-acres',    m.managed_acres.toLocaleString());
         setText('ov-harvests', m.active_harvests);
 
-        // Farms by state bar chart
         const s = await get('/overview/farms-by-state');
         makeChart('c1', 'bar', s.labels, s.data, {
             dataset: { backgroundColor: '#10b981' }
         });
 
-        // Crop distribution doughnut
         const cd = await get('/overview/crop-distribution');
         makeChart('c2', 'doughnut', cd.labels, cd.data, {
             options: { ...baseOpt, cutout: '75%', scales: {} }
         });
 
-        // Yield table (right panel)
         const yields = await get('/crops/recent-yields');
         const tbody = document.getElementById('yield-table');
         tbody.innerHTML = yields.map(y =>
@@ -418,7 +786,6 @@
             options: { ...baseOpt, cutout: '75%', scales: {} }
         });
 
-        // Recommendations in right panel
         const recs = await get('/soil/recommendations');
         const panel = document.getElementById('recommendations-panel');
         panel.innerHTML = recs.map(r =>
@@ -452,12 +819,10 @@
     async function init() {
         const statusEl = document.getElementById('api-status');
         try {
-            // Quick health check
             await fetch(API + '/health');
             statusEl.textContent = '🟢 API Connected';
             statusEl.className = 'connected';
 
-            // Load all tabs in parallel
             await Promise.all([
                 loadOverview(),
                 loadCrops(),
